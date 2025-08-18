@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Chantiers - BTP Manager{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-hard-hat me-2"></i>Liste des Chantiers</h1>
+        <a href="{{ path('app_chantier_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Ajouter un Chantier
+        </a>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" id="search" class="form-control" placeholder="Rechercher un chantier...">
+            </div>
+        </div>
+    </div>
+
+    <!-- Affichage sous forme de cartes -->
+    {% if chantiers|length > 0 %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for chantier in chantiers %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-hard-hat me-2"></i>{{ chantier.nom }}
+                            </h5>
+                        </div>
+                        
+                        {% if chantier.image %}
+                            <img src="{{ asset('uploads/images/' ~ chantier.image) }}" 
+                                 class="card-img-top object-fit-cover" 
+                                 style="height: 200px;" 
+                                 alt="Image du chantier {{ chantier.nom }}">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-users me-2"></i>Effectifs
+                                </h6>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="text-muted">Requis</small>
+                                        <div class="fw-bold text-primary">{{ chantier.effectifRequis }}</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Restant</small>
+                                        <div class="fw-bold {% if chantier.getEffectifRestant() == 0 %}text-success{% else %}text-warning{% endif %}">
+                                            {{ chantier.getEffectifRestant() == 0 ? 'Complet' : chantier.getEffectifRestant() }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-calendar me-2"></i>Dates
+                                </h6>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="text-muted">Début</small>
+                                        <div class="fw-bold">{{ chantier.dateDebut ? chantier.dateDebut|date('d/m/Y') : '-' }}</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Fin</small>
+                                        <div class="fw-bold">{{ chantier.dateFin ? chantier.dateFin|date('d/m/Y') : '-' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ path('app_chantier_show', {'id': chantier.id}) }}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Voir
+                                </a>
+                                <a href="{{ path('app_chantier_edit', {'id': chantier.id}) }}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Modifier
+                                </a>
+                                <form method="post" action="{{ path('app_chantier_delete', {'id': chantier.id}) }}" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce chantier ?')">
+                                        <i class="fas fa-trash me-1"></i>Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-hard-hat fa-3x text-muted mb-3"></i>
+            <h3 class="text-muted">Aucun chantier trouvé</h3>
+            <p class="text-muted">Commencez par créer votre premier chantier</p>
+            <a href="{{ path('app_chantier_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Créer un chantier
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.getElementById('search').addEventListener('keyup', function() {
+    const searchTerm = this.value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+    
+    cards.forEach(card => {
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        if (title.includes(searchTerm)) {
+            card.closest('.col').style.display = '';
+        } else {
+            card.closest('.col').style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

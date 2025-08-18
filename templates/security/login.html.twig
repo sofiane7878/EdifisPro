@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion - BTP Manager{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .login-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .login-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        width: 100%;
+        max-width: 400px;
+    }
+    .login-header {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: white;
+        padding: 2rem;
+        text-align: center;
+    }
+    .login-header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+    .login-header p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.9;
+    }
+    .login-body {
+        padding: 2rem;
+    }
+    .form-floating {
+        margin-bottom: 1rem;
+    }
+    .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    .btn-login {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+    }
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+    .login-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e9ecef;
+    }
+    .login-footer a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .login-footer a:hover {
+        text-decoration: underline;
+    }
+    .input-group-text {
+        background: transparent;
+        border: 2px solid #e9ecef;
+        border-right: none;
+        border-radius: 10px 0 0 10px;
+    }
+    .input-group .form-control {
+        border-left: none;
+        border-radius: 0 10px 10px 0;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1><i class="fas fa-hard-hat me-2"></i>BTP Manager</h1>
+            <p>Connectez-vous à votre espace de gestion</p>
+        </div>
+        
+        <div class="login-body">
+            {% if error %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Vous êtes connecté en tant que {{ app.user.userIdentifier }}
+                </div>
+                <a href="{{ path('app_logout') }}" class="btn btn-danger w-100">
+                    <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                </a>
+            {% else %}
+                <form method="post">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <input type="email" 
+                               value="{{ last_username }}" 
+                               name="email" 
+                               id="inputEmail" 
+                               class="form-control" 
+                               placeholder="Adresse email"
+                               autocomplete="email" 
+                               required 
+                               autofocus>
+                    </div>
+
+                    <div class="input-group mb-4">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                        <input type="password" 
+                               name="password" 
+                               id="inputPassword" 
+                               class="form-control" 
+                               placeholder="Mot de passe"
+                               autocomplete="current-password" 
+                               required>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <button class="btn btn-primary btn-login" type="submit">
+                        <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+                    </button>
+                </form>
+
+                <div class="login-footer">
+                    <p class="mb-0">
+                        Pas encore de compte ? 
+                        <a href="{{ path('app_register') }}">
+                            <i class="fas fa-user-plus me-1"></i>Inscrivez-vous ici
+                        </a>
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

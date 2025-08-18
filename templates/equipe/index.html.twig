@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/competences.html.twig' as competence_macros %}
+
+{% block title %}Liste des équipes - BTP Manager{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-users me-2"></i>Liste des équipes</h1>
+        <a href="{{ path('app_equipe_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Créer une nouvelle équipe
+        </a>
+    </div>
+
+    {% if equipes|length > 0 %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for equipe in equipes %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-users me-2"></i>{{ equipe.nomEquipe }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-tools me-2"></i>Compétences
+                                </h6>
+                                {{ competence_macros.competence_list(equipe.competences) }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <p class="mb-1">
+                                    <i class="fas fa-users me-2"></i>
+                                    <strong>Membres :</strong> {{ equipe.nombre }}
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fas fa-crown me-2"></i>
+                                    <strong>Chef :</strong> 
+                                    {% if equipe.chefEquipe %}
+                                        {{ equipe.chefEquipe.nomOuvrier }}
+                                    {% else %}
+                                        <span class="text-muted">Aucun</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ path('app_equipe_show', {'id': equipe.id}) }}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Voir
+                                </a>
+                                <a href="{{ path('app_equipe_edit', {'id': equipe.id}) }}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Modifier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+            <h3 class="text-muted">Aucune équipe trouvée</h3>
+            <p class="text-muted">Commencez par créer votre première équipe</p>
+            <a href="{{ path('app_equipe_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Créer une équipe
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

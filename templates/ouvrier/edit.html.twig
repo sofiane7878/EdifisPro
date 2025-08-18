@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'Ouvrier{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="h3 mb-0">Modifier l'ouvrier</h1>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.nom_ouvrier) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.role) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="form-label">Compétences</label>
+                                {% import 'macros/competences.html.twig' as competence_macros %}
+                                {{ competence_macros.competence_form_checkboxes(form.competences, 3) }}
+                            </div>
+                        </div>
+
+                        {% if ouvrier.user %}
+                            <div class="alert alert-info mt-3">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Compte utilisateur existant :</strong> {{ ouvrier.user.email }}
+                                <br>
+                                <small class="text-muted">Le mot de passe par défaut est : <code>ouvrier123</code></small>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning mt-3">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <strong>Aucun compte utilisateur :</strong> Cet ouvrier n'a pas encore de compte utilisateur.
+                                <br>
+                                <small class="text-muted">Pour créer un compte, utilisez la commande : <code>php bin/console app:create-user</code></small>
+                            </div>
+                        {% endif %}
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Enregistrer les modifications
+                                </button>
+                                <a href="{{ path('app_ouvrier_index') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                                </a>
+                            </div>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

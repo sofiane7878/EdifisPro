@@ -1,0 +1,121 @@
+{% import 'macros/competences.html.twig' as competence_macros %}
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-hard-hat me-2"></i>Informations du chantier
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-building"></i>
+                            </span>
+                            {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom du chantier'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.nom) }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-users"></i>
+                            </span>
+                            {{ form_widget(form.effectif_requis, {'attr': {'class': 'form-control', 'placeholder': 'Effectif requis'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.effectif_requis) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-calendar"></i>
+                            </span>
+                            {{ form_widget(form.date_debut, {'attr': {'class': 'form-control', 'type': 'date'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.date_debut) }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-calendar-check"></i>
+                            </span>
+                            {{ form_widget(form.date_fin, {'attr': {'class': 'form-control', 'type': 'date'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.date_fin) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-user-tie"></i>
+                        </span>
+                        {{ form_widget(form.chef_chantier, {'attr': {'class': 'form-control', 'placeholder': 'Sélectionner un chef de chantier'}}) }}
+                    </div>
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.chef_chantier) }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-image"></i>
+                        </span>
+                        {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.imageFile) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-tasks me-2"></i>Prérequis et Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-list-check me-2"></i>Prérequis du chantier
+                    </label>
+                    {{ competence_macros.competence_form_checkboxes(form.competencesRequises, 1) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.competencesRequises) }}
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                    <a href="{{ path('app_chantier_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/competences.html.twig' as competence_macros %}
+
+{% block title %}Détails du Chantier - BTP Manager{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-hard-hat me-2"></i>Détails du Chantier</h1>
+        <div>
+            <a href="{{ path('app_chantier_edit', {'id': chantier.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i>Modifier
+            </a>
+            <a href="{{ path('app_chantier_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Retour
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-hard-hat me-2"></i>{{ chantier.nom }}
+                    </h4>
+                </div>
+                
+                {% if chantier.image %}
+                    <img src="{{ asset('uploads/images/' ~ chantier.image) }}" 
+                         class="card-img-top object-fit-cover" 
+                         style="height: 300px;" 
+                         alt="Image du chantier {{ chantier.nom }}">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <i class="fas fa-image fa-4x text-muted"></i>
+                    </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-users me-2"></i>Effectifs
+                                </h6>
+                                <div class="d-flex justify-content-between">
+                                    <span>Requis :</span>
+                                    <strong class="text-primary">{{ chantier.effectifRequis }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Restant :</span>
+                                    <strong class="{% if chantier.getEffectifRestant() == 0 %}text-success{% else %}text-warning{% endif %}">
+                                        {{ chantier.getEffectifRestant() == 0 ? 'Complet' : chantier.getEffectifRestant() }}
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-calendar me-2"></i>Dates
+                                </h6>
+                                <div class="d-flex justify-content-between">
+                                    <span>Début :</span>
+                                    <strong>{{ chantier.dateDebut ? chantier.dateDebut|date('d/m/Y') : '-' }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Fin :</span>
+                                    <strong>{{ chantier.dateFin ? chantier.dateFin|date('d/m/Y') : '-' }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if chantier.competencesRequises|length > 0 %}
+                        <div class="mb-4">
+                            <h6 class="text-muted">
+                                <i class="fas fa-list-check me-2"></i>Compétences Requises
+                            </h6>
+                            {{ competence_macros.competence_list(chantier.competencesRequises) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_chantier_edit', {'id': chantier.id}) }}" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i>Modifier le chantier
+                        </a>
+                        <a href="{{ path('app_chantier_index') }}" class="btn btn-secondary">
+                            <i class="fas fa-list me-2"></i>Voir tous les chantiers
+                        </a>
+                        <form method="post" action="{{ path('app_chantier_delete', {'id': chantier.id}) }}" class="d-grid">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce chantier ?')">
+                                <i class="fas fa-trash me-2"></i>Supprimer le chantier
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

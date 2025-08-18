@@ -1,0 +1,303 @@
+Comptes ouvriers générés le 14/08/2025 12:55:14
+==========================================
+
+Email: jean.dupont1@btp.com
+Mot de passe: ouvrier123
+Nom: Jean Dupont
+Rôle: Ouvrier
+Compétences: 1
+------------------------------------------
+Email: marie.martin2@btp.com
+Mot de passe: ouvrier123
+Nom: Marie Martin
+Rôle: Ouvrier
+Compétences: 1
+------------------------------------------
+Email: pierre.durand3@btp.com
+Mot de passe: ouvrier123
+Nom: Pierre Durand
+Rôle: Ouvrier
+Compétences: 4
+------------------------------------------
+Email: sophie.bernard4@btp.com
+Mot de passe: ouvrier123
+Nom: Sophie Bernard
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: michel.petit5@btp.com
+Mot de passe: ouvrier123
+Nom: Michel Petit
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: isabelle.moreau6@btp.com
+Mot de passe: ouvrier123
+Nom: Isabelle Moreau
+Rôle: Ouvrier
+Compétences: 4
+------------------------------------------
+Email: francois.leroy7@btp.com
+Mot de passe: ouvrier123
+Nom: François Leroy
+Rôle: Ouvrier
+Compétences: 4
+------------------------------------------
+Email: nathalie.simon8@btp.com
+Mot de passe: ouvrier123
+Nom: Nathalie Simon
+Rôle: Chef
+Compétences: 4
+------------------------------------------
+Email: philippe.michel9@btp.com
+Mot de passe: ouvrier123
+Nom: Philippe Michel
+Rôle: Chef
+Compétences: 2
+------------------------------------------
+Email: catherine.roux10@btp.com
+Mot de passe: ouvrier123
+Nom: Catherine Roux
+Rôle: Chef
+Compétences: 3
+------------------------------------------
+Email: andre.david11@btp.com
+Mot de passe: ouvrier123
+Nom: André David
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: monique.bertrand12@btp.com
+Mot de passe: ouvrier123
+Nom: Monique Bertrand
+Rôle: Chef
+Compétences: 4
+------------------------------------------
+Email: robert.riviere13@btp.com
+Mot de passe: ouvrier123
+Nom: Robert Rivière
+Rôle: Chef
+Compétences: 1
+------------------------------------------
+Email: jacqueline.brun14@btp.com
+Mot de passe: ouvrier123
+Nom: Jacqueline Brun
+Rôle: Chef
+Compétences: 3
+------------------------------------------
+Email: marcel.meunier15@btp.com
+Mot de passe: ouvrier123
+Nom: Marcel Meunier
+Rôle: Chef
+Compétences: 4
+------------------------------------------
+Email: francoise.blanchard16@btp.com
+Mot de passe: ouvrier123
+Nom: Françoise Blanchard
+Rôle: Chef
+Compétences: 1
+------------------------------------------
+Email: henri.guerin17@btp.com
+Mot de passe: ouvrier123
+Nom: Henri Guerin
+Rôle: Chef
+Compétences: 4
+------------------------------------------
+Email: suzanne.bonnet18@btp.com
+Mot de passe: ouvrier123
+Nom: Suzanne Bonnet
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: georges.lemoine19@btp.com
+Mot de passe: ouvrier123
+Nom: Georges Lemoine
+Rôle: Ouvrier
+Compétences: 4
+------------------------------------------
+Email: therese.caron20@btp.com
+Mot de passe: ouvrier123
+Nom: Thérèse Caron
+Rôle: Chef
+Compétences: 1
+------------------------------------------
+Email: marcel.clement21@btp.com
+Mot de passe: ouvrier123
+Nom: Marcel Clement
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: jeanne.denis22@btp.com
+Mot de passe: ouvrier123
+Nom: Jeanne Denis
+Rôle: Chef
+Compétences: 1
+------------------------------------------
+Email: roger.leroux23@btp.com
+Mot de passe: ouvrier123
+Nom: Roger Leroux
+Rôle: Chef
+Compétences: 2
+------------------------------------------
+Email: madeleine.mercier24@btp.com
+Mot de passe: ouvrier123
+Nom: Madeleine Mercier
+Rôle: Chef
+Compétences: 4
+------------------------------------------
+Email: claude.faure25@btp.com
+Mot de passe: ouvrier123
+Nom: Claude Faure
+Rôle: Chef
+Compétences: 3
+------------------------------------------
+Email: nicole.andre26@btp.com
+Mot de passe: ouvrier123
+Nom: Nicole Andre
+Rôle: Chef
+Compétences: 2
+------------------------------------------
+Email: guy.gauthier27@btp.com
+Mot de passe: ouvrier123
+Nom: Guy Gauthier
+Rôle: Chef
+Compétences: 1
+------------------------------------------
+Email: danielle.joly28@btp.com
+Mot de passe: ouvrier123
+Nom: Danielle Joly
+Rôle: Ouvrier
+Compétences: 1
+------------------------------------------
+Email: jeanpierre.chauvin29@btp.com
+Mot de passe: ouvrier123
+Nom: Jean-Pierre Chauvin
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: monique.menard30@btp.com
+Mot de passe: ouvrier123
+Nom: Monique Menard
+Rôle: Ouvrier
+Compétences: 1
+------------------------------------------
+Email: michel.leblanc31@btp.com
+Mot de passe: ouvrier123
+Nom: Michel Leblanc
+Rôle: Ouvrier
+Compétences: 2
+------------------------------------------
+Email: francoise.girard32@btp.com
+Mot de passe: ouvrier123
+Nom: Françoise Girard
+Rôle: Chef
+Compétences: 1
+------------------------------------------
+Email: pierre.bonnet33@btp.com
+Mot de passe: ouvrier123
+Nom: Pierre Bonnet
+Rôle: Chef
+Compétences: 4
+------------------------------------------
+Email: marie.lemoine34@btp.com
+Mot de passe: ouvrier123
+Nom: Marie Lemoine
+Rôle: Chef
+Compétences: 2
+------------------------------------------
+Email: jacques.brun35@btp.com
+Mot de passe: ouvrier123
+Nom: Jacques Brun
+Rôle: Ouvrier
+Compétences: 4
+------------------------------------------
+Email: suzanne.caron36@btp.com
+Mot de passe: ouvrier123
+Nom: Suzanne Caron
+Rôle: Ouvrier
+Compétences: 1
+------------------------------------------
+Email: andre.clement37@btp.com
+Mot de passe: ouvrier123
+Nom: André Clement
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: therese.denis38@btp.com
+Mot de passe: ouvrier123
+Nom: Thérèse Denis
+Rôle: Ouvrier
+Compétences: 4
+------------------------------------------
+Email: marcel.leroux39@btp.com
+Mot de passe: ouvrier123
+Nom: Marcel Leroux
+Rôle: Ouvrier
+Compétences: 1
+------------------------------------------
+Email: jeanne.mercier40@btp.com
+Mot de passe: ouvrier123
+Nom: Jeanne Mercier
+Rôle: Ouvrier
+Compétences: 4
+------------------------------------------
+Email: roger.faure41@btp.com
+Mot de passe: ouvrier123
+Nom: Roger Faure
+Rôle: Ouvrier
+Compétences: 1
+------------------------------------------
+Email: madeleine.andre42@btp.com
+Mot de passe: ouvrier123
+Nom: Madeleine Andre
+Rôle: Chef
+Compétences: 1
+------------------------------------------
+Email: claude.gauthier43@btp.com
+Mot de passe: ouvrier123
+Nom: Claude Gauthier
+Rôle: Chef
+Compétences: 3
+------------------------------------------
+Email: nicole.joly44@btp.com
+Mot de passe: ouvrier123
+Nom: Nicole Joly
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: guy.chauvin45@btp.com
+Mot de passe: ouvrier123
+Nom: Guy Chauvin
+Rôle: Chef
+Compétences: 4
+------------------------------------------
+Email: danielle.menard46@btp.com
+Mot de passe: ouvrier123
+Nom: Danielle Menard
+Rôle: Ouvrier
+Compétences: 3
+------------------------------------------
+Email: jeanpierre.leblanc47@btp.com
+Mot de passe: ouvrier123
+Nom: Jean-Pierre Leblanc
+Rôle: Ouvrier
+Compétences: 2
+------------------------------------------
+Email: monique.girard48@btp.com
+Mot de passe: ouvrier123
+Nom: Monique Girard
+Rôle: Ouvrier
+Compétences: 4
+------------------------------------------
+Email: michel.bonnet49@btp.com
+Mot de passe: ouvrier123
+Nom: Michel Bonnet
+Rôle: Chef
+Compétences: 2
+------------------------------------------
+Email: francoise.lemoine50@btp.com
+Mot de passe: ouvrier123
+Nom: Françoise Lemoine
+Rôle: Chef
+Compétences: 1
+------------------------------------------

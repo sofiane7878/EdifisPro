@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - BTP Manager{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .register-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .register-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        width: 100%;
+        max-width: 500px;
+    }
+    .register-header {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: white;
+        padding: 2rem;
+        text-align: center;
+    }
+    .register-header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+    .register-header p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.9;
+    }
+    .register-body {
+        padding: 2rem;
+    }
+    .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    .btn-register {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+    }
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+    .register-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e9ecef;
+    }
+    .register-footer a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .register-footer a:hover {
+        text-decoration: underline;
+    }
+    .form-check-input:checked {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .form-check-input:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    .input-group-text {
+        background: transparent;
+        border: 2px solid #e9ecef;
+        border-right: none;
+        border-radius: 10px 0 0 10px;
+    }
+    .input-group .form-control {
+        border-left: none;
+        border-radius: 0 10px 10px 0;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <h1><i class="fas fa-user-plus me-2"></i>Inscription</h1>
+            <p>Créez votre compte BTP Manager</p>
+        </div>
+        
+        <div class="register-body">
+            {# Affichage des erreurs du formulaire #}
+            {% if form_errors(registrationForm) %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {{ form_errors(registrationForm) }}
+                </div>
+            {% endif %}
+
+            {# Début du formulaire #}
+            {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                {{ form_widget(registrationForm.email, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'Adresse email'
+                    }
+                }) }}
+            </div>
+            {% if form_errors(registrationForm.email) %}
+                <div class="alert alert-danger">
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+            {% endif %}
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">
+                    <i class="fas fa-lock"></i>
+                </span>
+                {{ form_widget(registrationForm.plainPassword, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'Mot de passe'
+                    }
+                }) }}
+            </div>
+            {% if form_errors(registrationForm.plainPassword) %}
+                <div class="alert alert-danger">
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+            {% endif %}
+
+            <div class="form-check mb-4">
+                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions d\'utilisation', {
+                    'label_attr': {'class': 'form-check-label'}
+                }) }}
+                {% if form_errors(registrationForm.agreeTerms) %}
+                    <div class="alert alert-danger mt-2">
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-register">
+                <i class="fas fa-user-plus me-2"></i>Créer mon compte
+            </button>
+
+            {{ form_end(registrationForm) }}
+
+            <div class="register-footer">
+                <p class="mb-0">
+                    Déjà un compte ? 
+                    <a href="{{ path('app_login') }}">
+                        <i class="fas fa-sign-in-alt me-1"></i>Connectez-vous ici
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

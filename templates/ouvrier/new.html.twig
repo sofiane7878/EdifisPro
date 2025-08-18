@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel Ouvrier{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="h3 mb-0">Créer un nouvel ouvrier</h1>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.nom_ouvrier) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.prenom) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.email) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.createUserAccount) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.role) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="form-label">Compétences</label>
+                                {% import 'macros/competences.html.twig' as competence_macros %}
+                                {{ competence_macros.competence_form_checkboxes(form.competences, 3) }}
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Créer l'ouvrier
+                                </button>
+                                <a href="{{ path('app_ouvrier_index') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                                </a>
+                            </div>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nomInput = document.querySelector('input[name*="[nom_ouvrier]"]');
+            const prenomInput = document.querySelector('input[name*="[prenom]"]');
+            const emailInput = document.querySelector('input[name*="[email]"]');
+            const createAccountCheckbox = document.querySelector('input[name*="[createUserAccount]"]');
+
+            function generateEmail() {
+                const nom = nomInput.value.trim();
+                const prenom = prenomInput.value.trim();
+                
+                if (nom && prenom) {
+                    // Normaliser les caractères (même logique que côté serveur)
+                    const normalizedNom = nom.toLowerCase()
+                        .replace(/[àáâãäçèéêëìíîïñòóôõöùúûüýÿ]/g, function(match) {
+                            const accents = {
+                                'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a',
+                                'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e',
+                                'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ñ': 'n',
+                                'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o',
+                                'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u', 'ý': 'y', 'ÿ': 'y'
+                            };
+                            return accents[match] || match;
+                        })
+                        .replace(/[^a-z0-9]/g, '');
+                    
+                    const normalizedPrenom = prenom.toLowerCase()
+                        .replace(/[àáâãäçèéêëìíîïñòóôõöùúûüýÿ]/g, function(match) {
+                            const accents = {
+                                'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a',
+                                'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e',
+                                'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ñ': 'n',
+                                'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o',
+                                'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u', 'ý': 'y', 'ÿ': 'y'
+                            };
+                            return accents[match] || match;
+                        })
+                        .replace(/[^a-z0-9]/g, '');
+                    
+                    const email = normalizedNom + '.' + normalizedPrenom + '@btp.com';
+                    emailInput.value = email;
+                } else {
+                    emailInput.value = '';
+                }
+            }
+
+            function toggleEmailField() {
+                const isChecked = createAccountCheckbox.checked;
+                emailInput.disabled = !isChecked;
+                prenomInput.disabled = !isChecked;
+                
+                if (!isChecked) {
+                    emailInput.value = '';
+                    prenomInput.value = '';
+                } else {
+                    generateEmail();
+                }
+            }
+
+            // Événements
+            nomInput.addEventListener('input', generateEmail);
+            prenomInput.addEventListener('input', generateEmail);
+            createAccountCheckbox.addEventListener('change', toggleEmailField);
+
+            // Initialisation
+            toggleEmailField();
+        });
+    </script>
+{% endblock %}

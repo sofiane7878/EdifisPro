@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Chantiers - {{ ouvrier.nomOuvrier }}{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-hard-hat me-2"></i>Mes Chantiers</h1>
+        <a href="{{ path('app_ouvrier_dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Retour au tableau de bord
+        </a>
+    </div>
+
+    {% if chantiers|length > 0 %}
+        <div class="row">
+            {% for chantier in chantiers %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">{{ chantier.nom }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>Description:</strong><br>
+                                {{ chantier.description|default('Aucune description') }}
+                            </p>
+                            
+                            <div class="mb-3">
+                                <strong>Localisation:</strong><br>
+                                <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                                {{ chantier.localisation|default('Non spécifiée') }}
+                            </div>
+
+                            {% if chantier.competencesRequises|length > 0 %}
+                                <div class="mb-3">
+                                    <strong>Compétences requises:</strong><br>
+                                    {% for competence in chantier.competencesRequises %}
+                                        <span class="badge bg-info me-1">{{ competence.nom }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <div class="mb-3">
+                                <strong>Statut:</strong><br>
+                                {% set today = "now"|date('Y-m-d') %}
+                                {% if chantier.dateFin|date('Y-m-d') < today %}
+                                    <span class="badge bg-secondary">Terminé</span>
+                                {% elseif chantier.dateDebut|date('Y-m-d') <= today and chantier.dateFin|date('Y-m-d') >= today %}
+                                    <span class="badge bg-success">En cours</span>
+                                {% else %}
+                                    <span class="badge bg-warning">À venir</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="text-muted">Début</small><br>
+                                    <strong>{{ chantier.dateDebut|date('d/m/Y') }}</strong>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Fin</small><br>
+                                    <strong>{{ chantier.dateFin|date('d/m/Y') }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    {{ chantier.dateDebut|date('d/m/Y') }} - {{ chantier.dateFin|date('d/m/Y') }}
+                                </small>
+                                <span class="badge bg-primary">{{ chantier.priorite|default('Normal') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-hard-hat fa-4x text-muted mb-4"></i>
+            <h3 class="text-muted">Aucun chantier assigné</h3>
+            <p class="text-muted">Vous n'avez pas encore de chantiers assignés.</p>
+            <a href="{{ path('app_ouvrier_dashboard') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-left me-1"></i>Retour au tableau de bord
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

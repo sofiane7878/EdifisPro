@@ -1,0 +1,71 @@
+{% import 'macros/competences.html.twig' as competence_macros %}
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-cog me-2"></i>Informations de l'ouvrier
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            {{ form_widget(form.nom_ouvrier, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'ouvrier'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.nom_ouvrier) }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-briefcase"></i>
+                            </span>
+                            {{ form_widget(form.role, {'attr': {'class': 'form-control', 'placeholder': 'Rôle de l\'ouvrier'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.role) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-tools me-2"></i>Compétences
+                    </label>
+                    {{ competence_macros.competence_form_checkboxes(form.competences, 3) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.competences) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-cogs me-2"></i>Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                    <a href="{{ path('app_ouvrier_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

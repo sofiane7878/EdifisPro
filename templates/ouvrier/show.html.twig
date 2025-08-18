@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/competences.html.twig' as competence_macros %}
+
+{% block title %}Détails de l'Ouvrier - BTP Manager{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-user me-2"></i>Détails de l'Ouvrier</h1>
+        <div>
+            <a href="{{ path('app_ouvrier_edit', {'id': ouvrier.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i>Modifier
+            </a>
+            <a href="{{ path('app_ouvrier_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Retour
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user me-2"></i>{{ ouvrier.nomOuvrier }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-id-card me-2"></i>Informations
+                                </h6>
+                                <div class="d-flex justify-content-between">
+                                    <span>ID :</span>
+                                    <strong>{{ ouvrier.id }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Rôle :</span>
+                                    <strong>{{ ouvrier.role }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-users me-2"></i>Équipe
+                                </h6>
+                                <div class="fw-bold">
+                                    {% if ouvrier.equipe %}
+                                        {{ ouvrier.equipe.nomEquipe }}
+                                    {% else %}
+                                        <span class="text-muted">Aucune équipe</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="text-muted">
+                            <i class="fas fa-tools me-2"></i>Compétences
+                        </h6>
+                        {{ competence_macros.competence_list(ouvrier.competences) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_ouvrier_edit', {'id': ouvrier.id}) }}" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i>Modifier l'ouvrier
+                        </a>
+                        <a href="{{ path('app_ouvrier_index') }}" class="btn btn-secondary">
+                            <i class="fas fa-list me-2"></i>Voir tous les ouvriers
+                        </a>
+                        <form method="post" action="{{ path('app_ouvrier_delete', {'id': ouvrier.id}) }}" class="d-grid">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cet ouvrier ?')">
+                                <i class="fas fa-trash me-2"></i>Supprimer l'ouvrier
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

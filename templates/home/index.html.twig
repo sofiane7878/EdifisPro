@@ -1,0 +1,229 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - BTP Manager{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .hero {
+        background: linear-gradient(135deg, rgba(0, 123, 255, 0.9), rgba(0, 198, 255, 0.9)), url('https://source.unsplash.com/1600x900/?construction,team') no-repeat center center;
+        background-size: cover;
+        color: white;
+        text-align: center;
+        padding: 120px 20px;
+        margin-bottom: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .hero h1 {
+        font-size: 3.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .hero p {
+        font-size: 1.3rem;
+        opacity: 0.95;
+        margin-bottom: 2rem;
+    }
+    .stats-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+    }
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    .stats-label {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    .feature-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: white;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        padding: 50px 20px;
+        height: 100%;
+        position: relative;
+    }
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .feature-card:hover::before {
+        opacity: 1;
+    }
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        position: relative;
+        z-index: 1;
+    }
+    .card-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+    .card-text {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 20px;
+    }
+    .card i {
+        font-size: 60px;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+    .btn-custom {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .btn-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .welcome-section {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-4">
+    <!-- Section de bienvenue -->
+    <div class="welcome-section">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="mb-3"><i class="fas fa-user-circle me-2"></i>Bonjour, {{ app.user.email }}</h2>
+                <p class="lead mb-0">Accédez rapidement aux fonctionnalités principales de votre gestion BTP.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <span class="badge bg-success fs-6">
+                    <i class="fas fa-check-circle me-1"></i>Connecté
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Hero -->
+    <header class="hero">
+        <div class="container">
+            <h1><i class="fas fa-hard-hat me-3"></i>Bienvenue sur BTP Manager</h1>
+            <p>Gérez efficacement vos équipes, chantiers, ouvriers et affectations avec notre plateforme intuitive</p>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stats-number">{{ equipes_count }}</div>
+                                <div class="stats-label">Équipes</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stats-number">{{ chantiers_count }}</div>
+                                <div class="stats-label">Chantiers</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stats-number">{{ ouvriers_count }}</div>
+                                <div class="stats-label">Ouvriers</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stats-number">{{ affectations_count }}</div>
+                                <div class="stats-label">Affectations</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section des fonctionnalités -->
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% set sections = [
+            {
+                'title': 'Gestion des Équipes', 
+                'text': 'Créez et gérez vos équipes de travail avec leurs spécialités et compétences.', 
+                'route': 'app_equipe_index', 
+                'icon': 'fas fa-users',
+                'color': 'primary'
+            },
+            {
+                'title': 'Gestion des Chantiers', 
+                'text': 'Suivez vos chantiers en cours avec leurs détails et progressions.', 
+                'route': 'app_chantier_index', 
+                'icon': 'fas fa-hard-hat',
+                'color': 'success'
+            },
+            {
+                'title': 'Gestion des Affectations', 
+                'text': 'Assignez vos ouvriers aux chantiers et suivez leurs affectations.', 
+                'route': 'app_affectation_index', 
+                'icon': 'fas fa-tasks',
+                'color': 'warning'
+            },
+            {
+                'title': 'Gestion des Ouvriers', 
+                'text': 'Gérez votre personnel avec leurs compétences et informations détaillées.', 
+                'route': 'app_ouvrier_index', 
+                'icon': 'fas fa-user-cog',
+                'color': 'info'
+            }
+        ] %}
+
+        {% for section in sections %}
+            <div class="col">
+                <div class="feature-card">
+                    <div class="card-body">
+                        <i class="{{ section.icon }}"></i>
+                        <h5 class="card-title">{{ section.title }}</h5>
+                        <p class="card-text">{{ section.text }}</p>
+                        <a href="{{ path(section.route) }}" class="btn btn-light btn-custom">
+                            <i class="fas fa-arrow-right me-2"></i>Accéder
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

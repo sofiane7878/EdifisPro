@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+{% import 'macros/competences.html.twig' as competence_macros %}
+
+{% block title %}Détails de la Compétence - BTP Manager{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-tools me-2"></i>Détails de la Compétence</h1>
+        <div>
+            <a href="{{ path('app_competence_edit', {'id': competence.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i>Modifier
+            </a>
+            <a href="{{ path('app_competence_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Retour
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        {{ competence_macros.competence_badge(competence) }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-info-circle me-2"></i>Informations
+                                </h6>
+                                <div class="d-flex justify-content-between">
+                                    <span>ID :</span>
+                                    <strong>{{ competence.id }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Catégorie :</span>
+                                    <strong>
+                                        {% if competence.categorie %}
+                                            <span class="badge bg-secondary">{{ competence.categorie }}</span>
+                                        {% else %}
+                                            <span class="text-muted">Non définie</span>
+                                        {% endif %}
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h6 class="text-muted">
+                                    <i class="fas fa-chart-bar me-2"></i>Statistiques
+                                </h6>
+                                <div class="d-flex justify-content-between">
+                                    <span>Ouvriers :</span>
+                                    <strong>{{ competence.ouvriers.count }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Équipes :</span>
+                                    <strong>{{ competence.equipes.count }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Chantiers :</span>
+                                    <strong>{{ competence.chantiers.count }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if competence.description %}
+                        <div class="mb-4">
+                            <h6 class="text-muted">
+                                <i class="fas fa-align-left me-2"></i>Description
+                            </h6>
+                            <p class="mb-0">{{ competence.description }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Utilisations de la compétence -->
+            {% if competence.ouvriers.count > 0 or competence.equipes.count > 0 or competence.chantiers.count > 0 %}
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-link me-2"></i>Utilisations
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if competence.ouvriers.count > 0 %}
+                            <h6>Ouvriers possédant cette compétence :</h6>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                {% for ouvrier in competence.ouvriers %}
+                                    <span class="badge bg-primary">{{ ouvrier.nomOuvrier }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if competence.equipes.count > 0 %}
+                            <h6>Équipes possédant cette compétence :</h6>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                {% for equipe in competence.equipes %}
+                                    <span class="badge bg-success">{{ equipe.nomEquipe }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if competence.chantiers.count > 0 %}
+                            <h6>Chantiers requérant cette compétence :</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                {% for chantier in competence.chantiers %}
+                                    <span class="badge bg-warning">{{ chantier.nom }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_competence_edit', {'id': competence.id}) }}" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i>Modifier la compétence
+                        </a>
+                        <a href="{{ path('app_competence_index') }}" class="btn btn-secondary">
+                            <i class="fas fa-list me-2"></i>Voir toutes les compétences
+                        </a>
+                        <form method="post" action="{{ path('app_competence_delete', {'id': competence.id}) }}" class="d-grid">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette compétence ?')">
+                                <i class="fas fa-trash me-2"></i>Supprimer la compétence
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

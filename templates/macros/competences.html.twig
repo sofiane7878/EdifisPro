@@ -1,0 +1,130 @@
+{# Macro pour afficher un badge de compétence stylisé #}
+{% macro competence_badge(competence, show_icon = true) %}
+    {% set category_class = competence.categorie ? competence.categorie|lower|replace({' ': '-', 'é': 'e', 'è': 'e', 'à': 'a', 'ç': 'c'}) : 'default' %}
+    {% set icon = competence.categorie ? _self.get_competence_icon(competence.categorie) : 'fas fa-tools' %}
+    
+    <span class="competence-badge {{ category_class }}" title="{{ competence.description ?: competence.nom }}">
+        {% if show_icon %}
+            <i class="{{ icon }}"></i>
+        {% endif %}
+        {{ competence.nom }}
+    </span>
+{% endmacro %}
+
+{# Macro pour afficher une liste de compétences #}
+{% macro competence_list(competences, show_icon = true, container_class = 'competences-container') %}
+    {% if competences|length > 0 %}
+        <div class="{{ container_class }}">
+            {% for competence in competences %}
+                {{ _self.competence_badge(competence, show_icon) }}
+            {% endfor %}
+        </div>
+    {% else %}
+        <span class="text-muted">Aucune compétence</span>
+    {% endif %}
+{% endmacro %}
+
+{# Fonction pour obtenir l'icône selon la catégorie #}
+{% macro get_competence_icon(categorie) %}
+    {% set icons = {
+        'Maçonnerie': 'fas fa-bricks',
+        'Maçon': 'fas fa-bricks',
+        'Coffrage': 'fas fa-cube',
+        'Coffreur': 'fas fa-cube',
+        'Ferraillage': 'fas fa-link',
+        'Ferrailleur': 'fas fa-link',
+        'Béton': 'fas fa-cubes',
+        'Électricité': 'fas fa-bolt',
+        'Plomberie': 'fas fa-faucet',
+        'Menuiserie': 'fas fa-hammer',
+        'Peinture': 'fas fa-paint-brush',
+        'Carrelage': 'fas fa-th-large',
+        'Isolation': 'fas fa-shield-alt',
+        'Charpente': 'fas fa-tree',
+        'Gros œuvre': 'fas fa-building',
+        'Second œuvre': 'fas fa-tools',
+        'Terrassement': 'fas fa-shovel',
+        'Voirie': 'fas fa-road',
+        'Technique': 'fas fa-cogs',
+        'Finitions': 'fas fa-paint-brush',
+        'Spécialisée': 'fas fa-star',
+        'Maçonnerie traditionnelle': 'fas fa-bricks',
+        'Maçonnerie moderne': 'fas fa-bricks',
+        'Coffrage bois': 'fas fa-cube',
+        'Coffrage métallique': 'fas fa-cube',
+        'Ferraillage béton armé': 'fas fa-link',
+        'Ferraillage précontraint': 'fas fa-link',
+        'Béton armé': 'fas fa-cubes',
+        'Béton précontraint': 'fas fa-cubes',
+        'Installation électrique': 'fas fa-bolt',
+        'Maintenance électrique': 'fas fa-bolt',
+        'Installation plomberie': 'fas fa-faucet',
+        'Maintenance plomberie': 'fas fa-faucet',
+        'Menuiserie bois': 'fas fa-hammer',
+        'Menuiserie métallique': 'fas fa-hammer',
+        'Peinture intérieure': 'fas fa-paint-brush',
+        'Peinture extérieure': 'fas fa-paint-brush',
+        'Carrelage mural': 'fas fa-th-large',
+        'Carrelage sol': 'fas fa-th-large',
+        'Isolation thermique': 'fas fa-shield-alt',
+        'Isolation phonique': 'fas fa-shield-alt',
+        'Charpente bois': 'fas fa-tree',
+        'Charpente métallique': 'fas fa-tree',
+        'Gros œuvre béton': 'fas fa-building',
+        'Gros œuvre maçonnerie': 'fas fa-building',
+        'Second œuvre finition': 'fas fa-tools',
+        'Second œuvre équipement': 'fas fa-tools',
+        'Terrassement mécanique': 'fas fa-shovel',
+        'Terrassement manuel': 'fas fa-shovel',
+        'Voirie urbaine': 'fas fa-road',
+        'Voirie rurale': 'fas fa-road'
+    } %}
+    
+    {% if icons[categorie] is defined %}
+        {{ icons[categorie] }}
+    {% else %}
+        fas fa-tools
+    {% endif %}
+{% endmacro %}
+
+{# Macro pour afficher les compétences dans un formulaire #}
+{% macro competence_form_checkboxes(form_competences, columns = 3) %}
+    <div class="row">
+        {% for competence in form_competences %}
+            <div class="col-md-{{ 12 // columns }} mb-2">
+                <div class="form-check">
+                    {{ form_widget(competence, {'attr': {'class': 'form-check-input'}}) }}
+                    <label class="form-check-label d-flex align-items-center" for="{{ competence.vars.id }}">
+                        {% set category_class = competence.vars.label|lower|replace({' ': '-', 'é': 'e', 'è': 'e', 'à': 'a', 'ç': 'c'}) %}
+                        <span class="competence-badge {{ category_class }} me-2" style="font-size: 0.8rem; padding: 0.3rem 0.5rem;">
+                            <i class="{{ _self.get_competence_icon(competence.vars.label) }}"></i>
+                            {{ competence.vars.label }}
+                        </span>
+                    </label>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{# Macro pour afficher les statistiques de compétences #}
+{% macro competence_stats(competences) %}
+    {% set categories = {} %}
+    {% for competence in competences %}
+        {% set cat = competence.categorie ?: 'Non catégorisée' %}
+        {% set categories = categories|merge({(cat): (categories[cat] ?: 0) + 1}) %}
+    {% endfor %}
+    
+    <div class="row">
+        {% for categorie, count in categories %}
+            <div class="col-md-3 mb-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ categorie }}</h6>
+                        <span class="badge bg-primary fs-6">{{ count }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %} 

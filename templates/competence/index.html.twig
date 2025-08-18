@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Compétences - BTP Manager{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-tools me-2"></i>Gestion des Compétences</h1>
+        <a href="{{ path('app_competence_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nouvelle Compétence
+        </a>
+    </div>
+
+    <!-- Filtres et statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ competences|length }}</h5>
+                    <p class="card-text">Total Compétences</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <a href="{{ path('app_competence_utilisees') }}" class="text-white text-decoration-none">
+                            {{ competences|filter(c => c.ouvriers.count > 0 or c.equipes.count > 0 or c.chantiers.count > 0)|length }}
+                        </a>
+                    </h5>
+                    <p class="card-text">Compétences Utilisées</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <a href="{{ path('app_competence_non_utilisees') }}" class="text-white text-decoration-none">
+                            {{ competences|filter(c => c.ouvriers.count == 0 and c.equipes.count == 0 and c.chantiers.count == 0)|length }}
+                        </a>
+                    </h5>
+                    <p class="card-text">Non Utilisées</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        {% set categories = [] %}
+                        {% for competence in competences %}
+                            {% if competence.categorie and competence.categorie not in categories %}
+                                {% set categories = categories|merge([competence.categorie]) %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ categories|length }}
+                    </h5>
+                    <p class="card-text">Catégories</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des compétences -->
+    {% if competences|length > 0 %}
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Liste des Compétences
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Catégorie</th>
+                                <th>Description</th>
+                                <th>Utilisation</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for competence in competences %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ competence.nom }}</strong>
+                                    </td>
+                                    <td>
+                                        {% if competence.categorie %}
+                                            <span class="badge bg-secondary">{{ competence.categorie }}</span>
+                                        {% else %}
+                                            <span class="text-muted">Non définie</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if competence.description %}
+                                            {{ competence.description|length > 50 ? competence.description|slice(0, 50) ~ '...' : competence.description }}
+                                        {% else %}
+                                            <span class="text-muted">Aucune description</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column gap-1">
+                                            {% if competence.ouvriers.count > 0 %}
+                                                <span class="badge bg-primary">{{ competence.ouvriers.count }} ouvrier(s)</span>
+                                            {% endif %}
+                                            {% if competence.equipes.count > 0 %}
+                                                <span class="badge bg-success">{{ competence.equipes.count }} équipe(s)</span>
+                                            {% endif %}
+                                            {% if competence.chantiers.count > 0 %}
+                                                <span class="badge bg-warning">{{ competence.chantiers.count }} chantier(s)</span>
+                                            {% endif %}
+                                            {% if competence.ouvriers.count == 0 and competence.equipes.count == 0 and competence.chantiers.count == 0 %}
+                                                <span class="badge bg-light text-dark">Non utilisée</span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ path('app_competence_show', {'id': competence.id}) }}" class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ path('app_competence_edit', {'id': competence.id}) }}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{{ path('app_competence_delete', {'id': competence.id}) }}" style="display: inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette compétence ?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-tools fa-3x text-muted mb-3"></i>
+            <h3 class="text-muted">Aucune compétence trouvée</h3>
+            <p class="text-muted">Commencez par créer votre première compétence</p>
+            <a href="{{ path('app_competence_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Créer une compétence
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

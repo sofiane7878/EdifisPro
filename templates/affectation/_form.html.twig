@@ -1,0 +1,107 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-tasks me-2"></i>Informations de l'affectation
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-tag"></i>
+                            </span>
+                            {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'affectation'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.nom) }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-hard-hat"></i>
+                            </span>
+                            {{ form_widget(form.chantier, {'attr': {'class': 'form-control', 'placeholder': 'Chantier sélectionné'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.chantier) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-calendar"></i>
+                            </span>
+                            {{ form_widget(form.date_debut, {'attr': {'class': 'form-control', 'type': 'date'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.date_debut) }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-calendar-check"></i>
+                            </span>
+                            {{ form_widget(form.date_fin, {'attr': {'class': 'form-control', 'type': 'date'}}) }}
+                        </div>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.date_fin) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-users me-2"></i>Sélectionner une équipe
+                    </label>
+                    <div class="row">
+                        {% for equipe in form.equipe %}
+                            <div class="col-12 mb-2">
+                                <div class="form-check">
+                                    {{ form_widget(equipe, {'attr': {'class': 'form-check-input'}}) }}
+                                    <label class="form-check-label" for="{{ equipe.vars.id }}">
+                                        {{ equipe.vars.label }}
+                                    </label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.equipe) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-cogs me-2"></i>Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                    <a href="{{ path('app_affectation_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
