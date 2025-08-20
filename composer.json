@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
+        "phpoffice/phpword": "^1.4",
         "symfony/asset": "7.2.*",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
@@ -26,6 +27,11 @@
         "symfony/yaml": "7.2.*"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.1",
+        "fakerphp/faker": "^1.24",
+        "phpunit/phpunit": "^11.5",
+        "symfony/browser-kit": "7.2.*",
+        "symfony/css-selector": "7.2.*",
         "symfony/maker-bundle": "^1.62"
     },
     "config": {
@@ -67,7 +73,12 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "test": "php bin/phpunit",
+        "test:coverage": "php bin/phpunit --coverage-html coverage/",
+        "test:unit": "php bin/phpunit --testsuite=unit",
+        "test:integration": "php bin/phpunit --testsuite=integration",
+        "test:quick": "php bin/phpunit --stop-on-failure"
     },
     "conflict": {
         "symfony/symfony": "*"
