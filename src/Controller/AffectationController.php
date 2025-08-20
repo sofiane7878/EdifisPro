@@ -49,44 +49,61 @@ final class AffectationController extends AbstractController
             $form = $this->createForm(\App\Form\AffectationType::class, $affectation);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $equipe = $affectation->getEquipe();
-                $dateDebut = $affectation->getDateDebut();
-                $dateFin = $affectation->getDateFin();
-
-                $errors = [];
+            // Debug: Vérifier si le formulaire est soumis
+            if ($form->isSubmitted()) {
+                $this->addFlash('info', 'Formulaire soumis');
                 
-                // Vérifier pour chaque ouvrier de l'équipe s'il a déjà une affectation qui chevauche cette période
-                foreach ($equipe->getOuvriers() as $ouvrier) {
-                    $existingAffectations = $affectationRepository->findBy([
-                        'equipe' => $equipe,
-                        // On suppose ici que l'affectation s'applique à l'ensemble des ouvriers de l'équipe.
-                    ]);
-                    foreach ($existingAffectations as $existing) {
-                        if ($this->datesOverlap($dateDebut, $dateFin, $existing->getDateDebut(), $existing->getDateFin())) {
-                            $errors[] = sprintf(
-                                "L'ouvrier %s est déjà affecté à un chantier du %s au %s.",
-                                $ouvrier->getNomOuvrier(),
-                                $existing->getDateDebut()->format('Y-m-d'),
-                                $existing->getDateFin()->format('Y-m-d')
-                            );
+                if ($form->isValid()) {
+                    $this->addFlash('info', 'Formulaire valide - traitement en cours...');
+                    
+                    $equipe = $affectation->getEquipe();
+                    $dateDebut = $affectation->getDateDebut();
+                    $dateFin = $affectation->getDateFin();
+
+                    $errors = [];
+                    
+                    // Vérifier pour chaque ouvrier de l'équipe s'il a déjà une affectation qui chevauche cette période
+                    foreach ($equipe->getOuvriers() as $ouvrier) {
+                        // Récupérer toutes les affectations existantes pour cet ouvrier
+                        $existingAffectations = $affectationRepository->createQueryBuilder('a')
+                            ->join('a.equipe', 'e')
+                            ->join('e.ouvriers', 'o')
+                            ->where('o.id = :ouvrierId')
+                            ->andWhere('a.id != :currentId OR :currentId IS NULL')
+                            ->setParameter('ouvrierId', $ouvrier->getId())
+                            ->setParameter('currentId', null)
+                            ->getQuery()
+                            ->getResult();
+                        
+                        foreach ($existingAffectations as $existing) {
+                            if ($this->datesOverlap($dateDebut, $dateFin, $existing->getDateDebut(), $existing->getDateFin())) {
+                                $errors[] = sprintf(
+                                    "L'ouvrier %s est déjà affecté au chantier '%s' du %s au %s.",
+                                    $ouvrier->getNomOuvrier(),
+                                    $existing->getChantier()->getNom(),
+                                    $existing->getDateDebut()->format('d/m/Y'),
+                                    $existing->getDateFin()->format('d/m/Y')
+                                );
+                            }
                         }
                     }
-                }
 
-                if (!empty($errors)) {
-                    foreach ($errors as $error) {
-                        $this->addFlash('error', $error);
+                    if (!empty($errors)) {
+                        foreach ($errors as $error) {
+                            $this->addFlash('error', $error);
+                        }
+                        return $this->redirectToRoute('app_affectation_new', ['id' => $chantier->getId()]);
                     }
-                    return $this->redirectToRoute('app_affectation_new', ['id' => $chantier->getId()]);
+
+                    // Aucune erreur détectée : persister l'affectation
+                    $entityManager->persist($affectation);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Affectation créée avec succès.');
+                    return $this->redirectToRoute('app_affectation_index', [], Response::HTTP_SEE_OTHER);
+                } else {
+                    $this->addFlash('error', 'Formulaire invalide: ' . $form->getErrors(true)->__toString());
                 }
-
-                // Aucune erreur détectée : persister l'affectation
-                $entityManager->persist($affectation);
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Affectation créée avec succès.');
-                return $this->redirectToRoute('app_affectation_index', [], Response::HTTP_SEE_OTHER);
             }
 
             return $this->render('affectation/new.html.twig', [

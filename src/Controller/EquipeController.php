@@ -33,16 +33,18 @@ final class EquipeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ouvriers = $form->get('ouvriers')->getData();
-            $equipe->setNombre(count($ouvriers));
+            $ouvriersSelectionnes = $form->get('ouvriers')->getData();
+            $equipe->setNombre(count($ouvriersSelectionnes));
 
             $entityManager->persist($equipe);
 
-            foreach ($ouvriers as $ouvrier) {
+            // Ajouter les ouvriers sélectionnés à l'équipe
+            foreach ($ouvriersSelectionnes as $ouvrier) {
                 $ouvrier->setEquipe($equipe);
                 $entityManager->persist($ouvrier);
             }
 
+            // Mettre à jour la relation du chef d'équipe
             if ($equipe->getChefEquipe()) {
                 $chef = $equipe->getChefEquipe();
                 $chef->setEquipe($equipe);
@@ -51,6 +53,7 @@ final class EquipeController extends AbstractController
 
             $entityManager->flush();
 
+            $this->addFlash('success', 'Équipe créée avec succès.');
             return $this->redirectToRoute('app_equipe_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -74,13 +77,44 @@ final class EquipeController extends AbstractController
         $form = $this->createForm(EquipeType::class, $equipe);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $ouvriers = $form->get('ouvriers')->getData();
-            $equipe->setNombre(count($ouvriers));
+        // Debug: Vérifier si le formulaire est soumis
+        if ($form->isSubmitted()) {
+            $this->addFlash('info', 'Formulaire soumis');
+            
+            if ($form->isValid()) {
+                $this->addFlash('info', 'Formulaire valide - traitement en cours...');
+                
+                $ouvriersSelectionnes = $form->get('ouvriers')->getData();
+                $equipe->setNombre(count($ouvriersSelectionnes));
 
-            $entityManager->flush();
+                // D'abord, retirer tous les ouvriers de cette équipe
+                $ouvriersActuels = $equipe->getOuvriers();
+                foreach ($ouvriersActuels as $ouvrier) {
+                    $ouvrier->setEquipe(null);
+                    $entityManager->persist($ouvrier);
+                }
 
-            return $this->redirectToRoute('app_equipe_index', [], Response::HTTP_SEE_OTHER);
+                // Ensuite, ajouter les nouveaux ouvriers sélectionnés
+                foreach ($ouvriersSelectionnes as $ouvrier) {
+                    $ouvrier->setEquipe($equipe);
+                    $entityManager->persist($ouvrier);
+                }
+
+                // Mettre à jour la relation du chef d'équipe
+                if ($equipe->getChefEquipe()) {
+                    $chef = $equipe->getChefEquipe();
+                    $chef->setEquipe($equipe);
+                    $entityManager->persist($chef);
+                }
+
+                $entityManager->persist($equipe);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Équipe modifiée avec succès.');
+                return $this->redirectToRoute('app_equipe_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('error', 'Formulaire invalide: ' . $form->getErrors(true)->__toString());
+            }
         }
 
         return $this->render('equipe/edit.html.twig', [
