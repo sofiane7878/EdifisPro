@@ -5,6 +5,13 @@
 {% block body %}
     <h1>Create New Affectation</h1>
 
+    {# Affichage des erreurs de validation du formulaire #}
+    {% if form_errors(form) %}
+        <div class="alert alert-danger">
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+
     {{ include('affectation/_form.html.twig') }}
 
     <div class="mt-3">
