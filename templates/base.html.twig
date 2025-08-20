@@ -104,7 +104,8 @@
     <!-- Messages Flash - Conteneur centré -->
     <div class="container mt-3">
         {% for label, messages in app.flashes %}
-            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+            {% set alertClass = 'alert-' ~ (label == 'error' ? 'danger' : label) %}
+            <div class="alert {{ alertClass }} alert-dismissible fade show" role="alert">
                 {% for message in messages %}
                     <p class="mb-0">{{ message }}</p>
                 {% endfor %}
