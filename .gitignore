@@ -50,3 +50,7 @@ symfony.lock
 # SQLite (si utilisé en dev)
 *.sqlite
 *.sqlite3
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###

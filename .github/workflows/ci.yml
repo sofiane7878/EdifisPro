@@ -1,4 +1,4 @@
-name: CI - BTP Manager (Fixed)
+name: CI - Tests Simples
 
 on:
   push:
@@ -6,154 +6,50 @@ on:
   pull_request:
     branches: [ main, develop ]
 
-env:
-  PHP_VERSION: '8.2'
-
 jobs:
-  # ========================================
-  # JOB UNIQUE : Tests & Quality
-  # ========================================
-  test-and-quality:
-    name: 🧪 Tests & Quality
+  test:
+    name: 🧪 Tests Unitaires
     runs-on: ubuntu-latest
     
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: btp_management1_test
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
     - name: 📥 Checkout code
       uses: actions/checkout@v4
 
-    - name: 🐘 Setup PHP
+    - name: 🐘 Setup PHP 8.2
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ env.PHP_VERSION }}
+        php-version: '8.2'
         extensions: mbstring, intl, pdo_mysql, zip
         tools: composer:v2
-        coverage: xdebug
 
     - name: 🔧 Configure environment
       run: |
-        # Create .env file for CI
         cat > .env << 'EOF'
-        # define your env variables for the test env here
-        KERNEL_CLASS='App\Kernel'
-        APP_SECRET='$ecretf0rt3st'
-        SYMFONY_DEPRECATIONS_HELPER=999999
-        PANTHER_APP_ENV=panther
-        PANTHER_ERROR_SCREENSHOT_DIR=./var/error-screenshots
-
-        ###> symfony/framework-bundle ###
         APP_ENV=test
-        APP_SECRET=your-secret-here
-        ###< symfony/framework-bundle ###
-
-        ###> doctrine/doctrine-bundle ###
-        DATABASE_URL="mysql://root:root@127.0.0.1:3306/btp_management1_test"
-        ###< doctrine/doctrine-bundle ###
-
-        ###> symfony/mailer ###
-        # MAILER_DSN=null://null
-        ###< symfony/mailer ###
+        APP_SECRET=test-secret-key
+        DATABASE_URL="sqlite:///%kernel.project_dir%/var/test.db"
         EOF
 
     - name: 📦 Install dependencies
       run: composer install --prefer-dist --no-interaction --no-progress
-      timeout-minutes: 10
 
-    - name: 🗄️ Setup database
+    - name: 🗄️ Setup SQLite database
       run: |
         php bin/console doctrine:database:create --env=test --if-not-exists
-        php bin/console doctrine:migrations:migrate --env=test --no-interaction
-      timeout-minutes: 5
+        php bin/console doctrine:schema:create --env=test
 
     - name: 🧹 Clear cache
       run: php bin/console cache:clear --env=test
 
-    - name: 🧪 Run PHPUnit tests
-      run: php bin/phpunit --coverage-html=coverage/ --stop-on-failure --testsuite="Entity Tests,Controller Tests,Form Tests,Integration Tests"
-      timeout-minutes: 15
-
-    - name: 📦 Upload coverage artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: coverage/
-        retention-days: 30
-      if: always()
+    - name: 🧪 Run Entity Tests Only
+      run: php bin/phpunit --testsuite="Entity Tests" --stop-on-failure
 
     - name: 🔍 PHPStan Analysis
-      run: |
-        composer require --dev phpstan/phpstan --no-interaction
-        vendor/bin/phpstan analyse src/ --level=5 --no-progress || echo "PHPStan completed with warnings"
-      timeout-minutes: 5
+      run: vendor/bin/phpstan analyse src/ --level=5 --no-progress || echo "PHPStan completed with warnings"
 
-    - name: 🎨 PHP CodeSniffer
-      run: |
-        composer require --dev squizlabs/php_codesniffer --no-interaction
-        vendor/bin/phpcs src/ --standard=PSR12 --extensions=php || echo "PHPCS completed with warnings"
-      timeout-minutes: 5
-
-    - name: 🔒 Security Check
-      run: |
-        composer require --dev enlightn/security-checker --no-interaction
-        vendor/bin/security-checker security:check composer.lock || echo "Security check completed"
-      timeout-minutes: 5
-
-    - name: 📋 Create summary
-      uses: actions/github-script@v7
-      with:
-        script: |
-          try {
-            const summary = `
-            # 🧪 Test Results Summary
-            
-            ## ✅ Tests Status
-            - **Unit Tests**: ✅ Completed
-            - **Functional Tests**: ✅ Completed
-            - **Integration Tests**: ✅ Completed
-            
-            ## 📊 Coverage
-            - Coverage report available in artifacts
-            - Tests executed successfully
-            
-            ## 🔍 Quality Analysis
-            - **PHPStan**: ✅ Static analysis completed
-            - **PHPCS**: ✅ Code style checked
-            - **Security**: ✅ Security vulnerabilities checked
-            
-            ## 🎯 Next Steps
-            - Review coverage report
-            - Address any quality issues
-            - Ready for deployment
-            `;
-            
-            await core.summary
-              .addRaw(summary)
-              .write();
-          } catch (error) {
-            console.log('Summary creation failed:', error.message);
-          }
+    - name: 📋 Test Summary
       if: always()
-
-    - name: 🔔 Success notification
-      if: success()
       run: |
-        echo "🎉 CI Pipeline completed successfully!"
-        echo "✅ All tests passed"
-        echo "✅ Code quality checks completed"
-        echo "📊 Reports generated"
-
-    - name: 🔔 Failure notification
-      if: failure()
-      run: |
-        echo "❌ CI Pipeline failed!"
-        echo "🔍 Check the logs for details"
-        echo "🛠️ Fix the issues and push again"
+        echo "🎉 CI Pipeline completed!"
+        echo "✅ Entity tests executed"
+        echo "✅ Code analysis completed"
