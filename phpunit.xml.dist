@@ -39,13 +39,10 @@
         </exclude>
     </source>
 
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-        <exclude>
-            <directory suffix=".php">src/Command</directory>
-            <directory suffix=".php">src/Kernel.php</directory>
-        </exclude>
+    <coverage>
+        <report>
+            <html outputDirectory="coverage/"/>
+            <text outputFile="coverage.txt"/>
+        </report>
     </coverage>
 </phpunit>
