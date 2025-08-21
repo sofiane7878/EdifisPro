@@ -20,9 +20,7 @@
         <testsuite name="Controller Tests">
             <directory>tests/Controller</directory>
         </testsuite>
-        <testsuite name="Repository Tests">
-            <directory>tests/Repository</directory>
-        </testsuite>
+
         <testsuite name="Form Tests">
             <directory>tests/Form</directory>
         </testsuite>

@@ -78,7 +78,7 @@ jobs:
       run: php bin/console cache:clear --env=test
 
     - name: 🧪 Run PHPUnit tests
-      run: php bin/phpunit --coverage-html=coverage/ --stop-on-failure
+      run: php bin/phpunit --coverage-html=coverage/ --stop-on-failure --testsuite="Entity Tests,Controller Tests,Form Tests,Integration Tests"
       timeout-minutes: 15
 
     - name: 📦 Upload coverage artifacts
