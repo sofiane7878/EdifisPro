@@ -21,7 +21,6 @@
         <testsuite name="Controller Tests">
             <directory>tests/Controller</directory>
         </testsuite>
-
         <testsuite name="Form Tests">
             <directory>tests/Form</directory>
         </testsuite>
@@ -29,6 +28,16 @@
             <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/</directory>
+            <exclude>
+                <directory suffix=".php">src/Command</directory>
+                <directory suffix=".php">src/Kernel.php</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 
     <coverage processUncoveredFiles="true">
         <include>
