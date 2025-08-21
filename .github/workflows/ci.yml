@@ -58,7 +58,7 @@ jobs:
       run: php bin/console cache:clear --env=test
 
     - name: 💾 Cache dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: vendor
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
@@ -116,7 +116,7 @@ jobs:
       run: php bin/phpunit --coverage-clover=coverage.xml --coverage-html=coverage/
 
     - name: 📦 Upload coverage artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-report
         path: coverage/
@@ -170,13 +170,13 @@ jobs:
 
     steps:
     - name: 📥 Download coverage artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: coverage-report
         path: coverage/
 
     - name: 📋 Create summary
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           const summary = `
@@ -218,7 +218,7 @@ jobs:
     steps:
     - name: 📧 Success notification
       if: success()
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           console.log('🎉 CI Pipeline completed successfully!');
@@ -228,7 +228,7 @@ jobs:
 
     - name: 📧 Failure notification
       if: failure()
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           console.log('❌ CI Pipeline failed!');

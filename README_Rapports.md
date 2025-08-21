@@ -1,4 +1,4 @@
-# 📋 Rapports de Tests - BTP Manager
+:x:# 📋 Rapports de Tests - BTP Manager
 
 ## 📁 Fichiers Générés
 
