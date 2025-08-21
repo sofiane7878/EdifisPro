@@ -38,6 +38,7 @@ jobs:
         cat > .env << 'EOF'
         APP_ENV=test
         APP_SECRET=test-secret-key
+        KERNEL_CLASS=App\Kernel
         DATABASE_URL="mysql://root:root@127.0.0.1:3306/btp_management1_test"
         EOF
 
