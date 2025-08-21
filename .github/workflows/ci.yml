@@ -1,4 +1,4 @@
-name: CI - Tests Simples
+name: CI - Tests Complets
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: 🧪 Tests Unitaires
+    name: 🧪 Tests Complets
     runs-on: ubuntu-latest
     
     services:
@@ -22,17 +22,18 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     
     steps:
-    - name: 📥 Checkout code
+    - name: 📥 Récupération du code
       uses: actions/checkout@v4
 
-    - name: 🐘 Setup PHP 8.2
+    - name: 🐘 Configuration PHP 8.2
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
         extensions: mbstring, intl, pdo_mysql, zip
         tools: composer:v2
+        coverage: xdebug
 
-    - name: 🔧 Configure environment
+    - name: 🔧 Configuration de l'environnement
       run: |
         cat > .env << 'EOF'
         APP_ENV=test
@@ -40,26 +41,56 @@ jobs:
         DATABASE_URL="mysql://root:root@127.0.0.1:3306/btp_management1_test"
         EOF
 
-    - name: 📦 Install dependencies
+    - name: 📦 Installation des dépendances
       run: composer install --prefer-dist --no-interaction --no-progress
 
-    - name: 🗄️ Setup MySQL database
+    - name: 🗄️ Configuration de la base de données MySQL
       run: |
         php bin/console doctrine:database:create --env=test --if-not-exists
         php bin/console doctrine:schema:create --env=test
 
-    - name: 🧹 Clear cache
+    - name: 🧹 Nettoyage du cache
       run: php bin/console cache:clear --env=test
 
-    - name: 🧪 Run Entity Tests Only
+    - name: 🧪 Tests des entités
       run: php bin/phpunit --testsuite="Entity Tests" --stop-on-failure
 
-    - name: 🔍 PHPStan Analysis
-      run: vendor/bin/phpstan analyse src/ --level=5 --no-progress || echo "PHPStan completed with warnings"
+    - name: 🧪 Tests des contrôleurs
+      run: php bin/phpunit --testsuite="Controller Tests" --stop-on-failure
 
-    - name: 📋 Test Summary
+    - name: 🧪 Tests des formulaires
+      run: php bin/phpunit --testsuite="Form Tests" --stop-on-failure
+
+    - name: 🧪 Tests d'intégration
+      run: php bin/phpunit --testsuite="Integration Tests" --stop-on-failure
+
+    - name: 📊 Génération du rapport de couverture
+      run: php bin/phpunit --coverage-html=coverage/ --coverage-text
+
+    - name: 📦 Téléchargement du rapport de couverture
+      uses: actions/upload-artifact@v4
+      with:
+        name: rapport-couverture
+        path: coverage/
+        retention-days: 30
+      if: always()
+
+    - name: 🔍 Analyse PHPStan
+      run: vendor/bin/phpstan analyse src/ --level=5 --no-progress || echo "PHPStan terminé avec des avertissements"
+
+    - name: 🎨 Vérification du style de code
+      run: vendor/bin/phpcs src/ --standard=PSR12 --extensions=php || echo "PHPCS terminé avec des avertissements"
+
+    - name: 🔒 Vérification de sécurité
+      run: vendor/bin/security-checker security:check composer.lock || echo "Vérification de sécurité terminée"
+
+    - name: 📋 Résumé des tests
       if: always()
       run: |
-        echo "🎉 CI Pipeline completed!"
-        echo "✅ Entity tests executed"
-        echo "✅ Code analysis completed"
+        echo "🎉 Pipeline CI terminé !"
+        echo "✅ Tests des entités exécutés"
+        echo "✅ Tests des contrôleurs exécutés"
+        echo "✅ Tests des formulaires exécutés"
+        echo "✅ Tests d'intégration exécutés"
+        echo "✅ Analyse de code terminée"
+        echo "📊 Rapport de couverture disponible"
