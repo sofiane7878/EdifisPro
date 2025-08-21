@@ -29,15 +29,15 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src/</directory>
-            <exclude>
-                <directory suffix=".php">src/Command</directory>
-                <directory suffix=".php">src/Kernel.php</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">src/Command</directory>
+            <directory suffix=".php">src/Kernel.php</directory>
+        </exclude>
+    </source>
 
     <coverage processUncoveredFiles="true">
         <include>
