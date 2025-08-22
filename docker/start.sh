@@ -3,8 +3,10 @@
 # Attendre un peu pour la base de donnees
 sleep 10
 
-# Executer les scripts Symfony necessaires
-composer run-script post-install-cmd --no-dev --no-interaction || echo "Scripts Symfony termines"
+# Generer manuellement le fichier autoload_runtime.php
+if [ ! -f vendor/autoload_runtime.php ]; then
+    echo '<?php return require __DIR__./autoload.php;' > vendor/autoload_runtime.php
+fi
 
 # Nettoyer le cache
 php bin/console cache:clear --env=prod
@@ -13,7 +15,7 @@ php bin/console cache:clear --env=prod
 php bin/console assets:install public/ --relative
 
 # Executer les migrations (avec gestion d'erreur)
-php bin/console doctrine:migrations:migrate --env=prod --no-interaction || echo "Migrations failed, continuing..."
+php bin/console doctrine:migrations:migrate --env=prod --no-interaction || echo 'Migrations failed, continuing...'
 
 # Demarrer Apache
 apache2-foreground
