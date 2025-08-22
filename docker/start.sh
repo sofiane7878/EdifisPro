@@ -14,11 +14,12 @@ echo "Testing database connection..."
 
 # Nettoyer le cache avec debug
 echo "Clearing cache..."
-php bin/console cache:clear --env=prod --verbose
+php bin/console cache:clear --env=prod --verbose --no-warmup
+php bin/console cache:warmup --env=prod --verbose
 
 # Installer les assets
 echo "Installing assets..."
-php bin/console assets:install public/ --relative
+php bin/console assets:install public/ --relative --env=prod
 
 # Verifier les routes
 echo "Available routes:"
@@ -26,7 +27,7 @@ php bin/console debug:router --env=prod || echo "Routes command failed"
 
 # Executer les migrations (avec gestion d'erreur)
 echo "Running migrations..."
-php bin/console doctrine:migrations:migrate --env=prod --no-interaction || echo "Migrations failed, continuing..."
+php bin/console doctrine:migrations:migrate --env=prod --no-interaction --verbose || echo "Migrations failed, continuing..."
 
 # Verifier si des utilisateurs existent
 echo "Checking for existing users..."
@@ -39,6 +40,10 @@ php bin/console app:create-user --email=admin@edifispro.com --password=admin123 
 # Verifier que l'utilisateur a ete cree
 echo "Verifying user creation..."
 php bin/console doctrine:query:sql "SELECT email, roles FROM user" --env=prod || echo "Verification query failed"
+
+# Afficher les logs d'erreur pour debug
+echo "Checking error logs..."
+tail -n 20 /var/www/html/var/log/prod.log 2>/dev/null || echo "No prod log found"
 
 echo "Starting Apache..."
 # Demarrer Apache

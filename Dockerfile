@@ -39,11 +39,13 @@ COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 # Configurer les permissions et creer les repertoires necessaires
 RUN chown -R www-data:www-data /var/www/html
 RUN mkdir -p /var/www/html/var/cache /var/www/html/var/logs
-RUN chmod -R 755 /var/www/html/var
+RUN chmod -R 777 /var/www/html/var
+RUN chmod -R 777 /var/www/html/public/uploads
 
 # Creer le repertoire pour les uploads
 RUN mkdir -p /var/www/html/public/uploads/images && \
-    chown -R www-data:www-data /var/www/html/public/uploads
+    chown -R www-data:www-data /var/www/html/public/uploads && \
+    chmod -R 777 /var/www/html/public/uploads
 
 # Script de demarrage
 COPY docker/start.sh /start.sh
