@@ -28,9 +28,17 @@ php bin/console debug:router --env=prod || echo "Routes command failed"
 echo "Running migrations..."
 php bin/console doctrine:migrations:migrate --env=prod --no-interaction || echo "Migrations failed, continuing..."
 
-# Creer un utilisateur admin par defaut si aucun utilisateur n'existe
+# Verifier si des utilisateurs existent
 echo "Checking for existing users..."
-php bin/console app:create-user --email=admin@edifispro.com --password=admin123 --role=ROLE_ADMIN --env=prod || echo "Admin user creation failed or already exists"
+php bin/console doctrine:query:sql "SELECT COUNT(*) as count FROM user" --env=prod || echo "Query failed"
+
+# Creer un utilisateur admin par defaut si aucun utilisateur n'existe
+echo "Creating admin user..."
+php bin/console app:create-user --email=admin@edifispro.com --password=admin123 --role=ROLE_ADMIN --env=prod --verbose || echo "Admin user creation failed"
+
+# Verifier que l'utilisateur a ete cree
+echo "Verifying user creation..."
+php bin/console doctrine:query:sql "SELECT email, roles FROM user" --env=prod || echo "Verification query failed"
 
 echo "Starting Apache..."
 # Demarrer Apache
