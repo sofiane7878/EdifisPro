@@ -6,16 +6,28 @@ sleep 10
 # Generer manuellement le fichier autoload_runtime.php
 if [ ! -f vendor/autoload_runtime.php ]; then
     echo '<?php return require __DIR__ . "/autoload.php";' > vendor/autoload_runtime.php
+    echo "Generated autoload_runtime.php"
 fi
 
-# Nettoyer le cache
-php bin/console cache:clear --env=prod
+# Verifier que la base de donnees est accessible
+echo "Testing database connection..."
+
+# Nettoyer le cache avec debug
+echo "Clearing cache..."
+php bin/console cache:clear --env=prod --verbose
 
 # Installer les assets
+echo "Installing assets..."
 php bin/console assets:install public/ --relative
 
+# Verifier les routes
+echo "Available routes:"
+php bin/console debug:router --env=prod || echo "Routes command failed"
+
 # Executer les migrations (avec gestion d'erreur)
+echo "Running migrations..."
 php bin/console doctrine:migrations:migrate --env=prod --no-interaction || echo "Migrations failed, continuing..."
 
+echo "Starting Apache..."
 # Demarrer Apache
 apache2-foreground
