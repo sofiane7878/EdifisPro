@@ -28,6 +28,10 @@ php bin/console debug:router --env=prod || echo "Routes command failed"
 echo "Running migrations..."
 php bin/console doctrine:migrations:migrate --env=prod --no-interaction || echo "Migrations failed, continuing..."
 
+# Creer un utilisateur admin par defaut si aucun utilisateur n'existe
+echo "Checking for existing users..."
+php bin/console app:create-user --email=admin@edifispro.com --password=admin123 --role=ROLE_ADMIN --env=prod || echo "Admin user creation failed or already exists"
+
 echo "Starting Apache..."
 # Demarrer Apache
 apache2-foreground
