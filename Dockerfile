@@ -33,8 +33,9 @@ COPY . .
 RUN a2enmod rewrite
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
-# Configurer les permissions
+# Configurer les permissions et creer les repertoires necessaires
 RUN chown -R www-data:www-data /var/www/html
+RUN mkdir -p /var/www/html/var/cache /var/www/html/var/logs
 RUN chmod -R 755 /var/www/html/var
 
 # Creer le repertoire pour les uploads
