@@ -23,11 +23,11 @@ WORKDIR /var/www/html
 # Copier composer.json et composer.lock d'abord
 COPY composer.json composer.lock ./
 
-# Installer les dependances (sans les scripts automatiques)
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+# Installer les dependances (avec generation des fichiers d'autoload)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Installer Symfony Runtime (sans scripts)
-RUN composer require symfony/runtime --no-interaction --no-scripts
+# Installer Symfony Runtime
+RUN composer require symfony/runtime --no-interaction
 
 # Copier le reste des fichiers
 COPY . .

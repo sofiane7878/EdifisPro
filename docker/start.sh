@@ -3,9 +3,6 @@
 # Attendre un peu pour la base de donnees
 sleep 10
 
-# Executer les scripts Symfony necessaires
-composer run-script post-install-cmd --no-dev --no-interaction || echo "Scripts Symfony termines"
-
 # Nettoyer le cache
 php bin/console cache:clear --env=prod
 
