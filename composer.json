@@ -81,7 +81,12 @@
         "test:coverage": "php bin/phpunit --coverage-html coverage/",
         "test:unit": "php bin/phpunit --testsuite=unit",
         "test:integration": "php bin/phpunit --testsuite=integration",
-        "test:quick": "php bin/phpunit --stop-on-failure"
+        "test:quick": "php bin/phpunit --stop-on-failure",
+        "deploy": [
+            "php bin/console cache:clear --env=prod",
+            "php bin/console doctrine:migrations:migrate --env=prod --no-interaction",
+            "php bin/console assets:install public/ --relative"
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"
