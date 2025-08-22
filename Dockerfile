@@ -26,6 +26,9 @@ COPY composer.json composer.lock ./
 # Installer les dependances (sans les scripts automatiques)
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
+# Installer Symfony Runtime
+RUN composer require symfony/runtime --no-dev --no-interaction
+
 # Copier le reste des fichiers
 COPY . .
 
