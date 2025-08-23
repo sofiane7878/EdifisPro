@@ -9,10 +9,18 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libzip-dev \
     zip \
-    unzip
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
 
 # Installer les extensions PHP
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+# Installer OPcache pour les performances en production
+RUN docker-php-ext-install opcache
+RUN echo "opcache.enable=1" >> /usr/local/etc/php/php.ini \
+    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/php.ini \
+    && echo "opcache.max_accelerated_files=10000" >> /usr/local/etc/php/php.ini \
+    && echo "opcache.validate_timestamps=0" >> /usr/local/etc/php/php.ini
 
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -55,6 +63,10 @@ COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
 EXPOSE 80
+
+# Health check pour Railway
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost/ || exit 1
 
 CMD ["/start.sh"]
 
