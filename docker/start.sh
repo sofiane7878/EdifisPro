@@ -10,6 +10,9 @@ if [ ! -f vendor/autoload_runtime.php ]; then
     echo "Generated autoload_runtime.php"
 fi
 
+# Supprimer les fichiers .env problematiques
+rm -f .env.prod .env.local .env
+
 # Nettoyer et preparer le cache
 echo "Preparing cache..."
 php bin/console cache:clear --env=prod --no-warmup
