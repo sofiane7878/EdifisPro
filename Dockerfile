@@ -32,6 +32,9 @@ RUN composer require symfony/runtime --no-interaction --no-scripts
 # Copier le reste des fichiers
 COPY . .
 
+# Copier .env.example en .env pour le conteneur
+COPY .env.example .env
+
 # Configurer Apache
 RUN a2enmod rewrite
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
