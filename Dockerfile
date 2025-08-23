@@ -48,8 +48,8 @@ RUN a2enmod rewrite
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Configurer les permissions et creer les repertoires necessaires
-RUN chown -R www-data:www-data /var/www/html
 RUN mkdir -p /var/www/html/var/cache /var/www/html/var/logs
+RUN chown -R www-data:www-data /var/www/html
 RUN chmod -R 777 /var/www/html/var
 RUN chmod -R 777 /var/www/html/public/uploads
 
@@ -68,5 +68,5 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost/ || exit 1
 
-CMD ["/start.sh"]
+CMD ["/bin/bash", "/start.sh"]
 

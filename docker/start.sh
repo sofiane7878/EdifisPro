@@ -2,28 +2,9 @@
 
 # Attendre que la base de données MySQL soit disponible
 echo "Waiting for MySQL database..."
-# Vérification plus robuste de la connectivité MySQL
-until php -r "
-try {
-    \$dsn = getenv('DATABASE_URL');
-    if (empty(\$dsn)) {
-        echo 'DATABASE_URL not set, skipping database check';
-        exit(0);
-    }
-    \$pdo = new PDO(\$dsn);
-    \$pdo->query('SELECT 1');
-    echo 'MySQL database connected successfully';
-    exit(0);
-} catch (PDOException \$e) {
-    echo 'Database connection failed: ' . \$e->getMessage();
-    exit(1);
-}
-" > /dev/null 2>&1; do
-    echo "MySQL not ready, waiting..."
-    sleep 3
-done
+sleep 20
 
-echo "MySQL database is ready!"
+echo "Skipping database check for now, proceeding with startup..."
 
 # Generer le fichier autoload_runtime.php si necessaire
 if [ ! -f vendor/autoload_runtime.php ]; then
@@ -58,3 +39,4 @@ echo "Admin credentials: admin@edifispro.com / admin123"
 # Demarrer Apache
 echo "Starting Apache..."
 apache2-foreground
+
